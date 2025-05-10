@@ -1,0 +1,20 @@
+#!/usr/bin/env julia
+
+using JuliaFormatter
+
+function main()
+    # Check if the correct number of arguments is provided
+    if length(ARGS) == 0
+        println("Usage: jfmt <path>")
+        return
+    end
+
+    # Get the path from the command-line arguments
+
+    # Format the specified path
+    format(ARGS)
+
+    println("Formatted: $ARGS")
+end
+
+main()

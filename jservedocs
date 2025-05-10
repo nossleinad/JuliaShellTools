@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# Check if the -l option is provided
+OPTSTRING=":l"
+OPTION_L=false
+
+while getopts ${OPTSTRING} opt; do
+  case ${opt} in
+    l)
+      OPTION_L=true
+      ;;
+    ?)
+      echo "jservedocs: Invalid option: -${OPTARG}."
+      echo "usage: jservedocs [-l]"
+      exit 1
+      ;;
+  esac
+done
+
+# Get the path and convert to an absolute path if necessary
+PACKAGE_NAME=$(basename $(pwd))
+PACKAGE_NAME=${PACKAGE_NAME%%.jl*}
+
+# Construct the Julia command
+if $OPTION_L; then
+    echo "using Literate"
+    echo $PACKAGE_NAME
+    julia --project=docs -ie "using $PACKAGE_NAME, Literate, LiveServer; servedocs(literate=\"examples\", skip_dir=joinpath(\"docs\", \"src\", \"generated\"))"
+else
+    julia --project=docs -ie "using $PACKAGE_NAME, LiveServer; servedocs()"
+fi
